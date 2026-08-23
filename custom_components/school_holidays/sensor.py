@@ -72,9 +72,12 @@ class NextSchoolHolidaysSensor(
         period = _next_period(self.coordinator, today)
         if period is None:
             return {}
-        return {
+        attrs = {
             "start": period.start.isoformat(),
             "end": period.end.isoformat(),
             "days_until_start": max(0, (period.start - today).days),
             "duration_days": period.duration_days,
         }
+        if period.includes(today):
+            attrs["days_remaining"] = (period.end - today).days + 1
+        return attrs
