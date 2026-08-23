@@ -1,0 +1,12 @@
+{
+  "domain": "schulferien",
+  "name": "Schulferien",
+  "codeowners": ["@M4RKU5-C0D3"],
+  "config_flow": true,
+  "documentation": "https://github.com/M4RKU5-C0D3/HASH",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/M4RKU5-C0D3/HASH/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

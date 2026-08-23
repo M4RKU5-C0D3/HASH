@@ -1,0 +1,21 @@
+{
+  "title": "Schulferien",
+  "config": {
+    "step": {
+      "user": {
+        "title": "School Holidays",
+        "description": "Select the federal state whose school holidays should be provided.",
+        "data": {
+          "subdivision": "Federal state"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the OpenHolidays API.",
+      "invalid_subdivision": "Invalid federal state selected."
+    },
+    "abort": {
+      "already_configured": "This federal state is already configured."
+    }
+  }
+}

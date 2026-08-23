@@ -1,0 +1,21 @@
+{
+  "title": "Schulferien",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Schulferien",
+        "description": "Wähle das Bundesland, dessen Schulferien bereitgestellt werden sollen.",
+        "data": {
+          "subdivision": "Bundesland"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zur OpenHolidays API fehlgeschlagen.",
+      "invalid_subdivision": "Ungültiges Bundesland ausgewählt."
+    },
+    "abort": {
+      "already_configured": "Dieses Bundesland ist bereits konfiguriert."
+    }
+  }
+}

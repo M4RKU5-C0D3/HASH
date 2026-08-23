@@ -1,0 +1,24 @@
+automation:
+  - alias: "Alarm school term"
+    trigger:
+      - platform: time
+        at: "06:15:00"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.school_holidays_active_niedersachsen
+        state: "off"
+      - condition: time
+        weekday: [mon, tue, wed, thu, fri]
+    action:
+      - service: script.wecker_starten
+
+  - alias: "Alarm holidays"
+    trigger:
+      - platform: time
+        at: "08:30:00"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.school_holidays_active_niedersachsen
+        state: "on"
+    action:
+      - service: script.wecker_starten
