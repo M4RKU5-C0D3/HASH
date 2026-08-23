@@ -1,4 +1,4 @@
-"""Config Flow für die Schulferien-Integration."""
+"""Config flow for the school holidays integration."""
 
 from __future__ import annotations
 
@@ -27,17 +27,17 @@ _LOGGER = logging.getLogger(__name__)
 async def _async_fetch_subdivisions(
     hass: HomeAssistant,
 ) -> tuple[dict[str, str], str | None]:
-    """Lädt die Bundesländer; liefert (Optionen, Fehlerbasis) zurück."""
+    """Load the federal states; return (options, error base)."""
     client = OpenHolidaysApiClient(async_get_clientsession(hass))
     try:
         return await client.async_get_subdivisions(), None
     except (OpenHolidaysApiError, HomeAssistantError) as err:
-        _LOGGER.warning("Subdivisions konnten nicht geladen werden: %s", err)
+        _LOGGER.warning("Failed to load subdivisions: %s", err)
         return {}, "cannot_connect"
 
 
-class SchulferienConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Verarbeitet den Config-Flow."""
+class SchoolHolidaysConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+    """Handle the config flow."""
 
     VERSION = 1
 

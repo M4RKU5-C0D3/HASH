@@ -1,4 +1,4 @@
-"""Client für die OpenHolidays API (https://openholidaysapi.org)."""
+"""Client for the OpenHolidays API (https://openholidaysapi.org)."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ PREFERRED_LANGUAGES = ("DE", "EN")
 
 @dataclass(frozen=True)
 class HolidayPeriod:
-    """Ein Ferienzeitraum."""
+    """A holiday period."""
 
     name: str
     start: date
@@ -28,20 +28,20 @@ class HolidayPeriod:
 
     @property
     def duration_days(self) -> int:
-        """Gesamtdauer in Tagen (Start- und Endtag inklusive)."""
+        """Total duration in days (first and last day included)."""
         return (self.end - self.start).days + 1
 
     def includes(self, day: date) -> bool:
-        """True, wenn der Tag innerhalb des Zeitraums liegt."""
+        """Return true if the given day falls within the period."""
         return self.start <= day <= self.end
 
 
 class OpenHolidaysApiError(HomeAssistantError):
-    """Fehler bei der Kommunikation mit der OpenHolidays API."""
+    """Error while communicating with the OpenHolidays API."""
 
 
 def _localized_text(entries: list[dict[str, Any]] | None) -> str | None:
-    """Liefert den Text in der bevorzugten Sprache (DE vor EN)."""
+    """Return the text in the preferred language (DE before EN)."""
     if not entries:
         return None
     by_language = {str(e.get("language", "")).upper(): e.get("text") for e in entries}
@@ -61,7 +61,7 @@ def _parse_date(raw: Any) -> date | None:
 
 
 class OpenHolidaysApiClient:
-    """Async-Client für die OpenHolidays API."""
+    """Async client for the OpenHolidays API."""
 
     def __init__(self, session: ClientSession) -> None:
         self._session = session
@@ -76,16 +76,16 @@ class OpenHolidaysApiClient:
             response.raise_for_status()
             return await response.json()
         except TimeoutError as err:
-            raise OpenHolidaysApiError(f"Timeout bei Anfrage an {path}") from err
+            raise OpenHolidaysApiError(f"Timeout while requesting {path}") from err
         except ClientResponseError as err:
             raise OpenHolidaysApiError(
-                f"HTTP {err.status} bei Anfrage an {path}"
+                f"HTTP {err.status} while requesting {path}"
             ) from err
         except ClientError as err:
-            raise OpenHolidaysApiError(f"Verbindungsfehler bei Anfrage an {path}") from err
+            raise OpenHolidaysApiError(f"Connection error while requesting {path}") from err
 
     async def async_get_subdivisions(self) -> dict[str, str]:
-        """Liefert eine Abbildung Subdivision-Code → Bundeslandname."""
+        """Return a mapping of subdivision code to federal state name."""
         payload = await self._request(
             "/Subdivisions",
             {"countryIsoCode": "DE", "languageIsoCode": "DE"},
@@ -109,7 +109,7 @@ class OpenHolidaysApiClient:
         valid_from: date,
         valid_to: date,
     ) -> list[HolidayPeriod]:
-        """Liefert die Schulferien des Bundeslands im gewünschten Zeitraum."""
+        """Fetch school holidays of the given state within the requested range."""
         payload = await self._request(
             "/SchoolHolidays",
             {
@@ -126,12 +126,12 @@ class OpenHolidaysApiClient:
             end = _parse_date(entry.get("endDate"))
             if start is None or end is None or end < start:
                 _LOGGER.warning(
-                    "Überspringe ungültigen Ferieneintrag: %s", entry.get("id")
+                    "Skipping invalid holiday entry: %s", entry.get("id")
                 )
                 continue
             periods.append(
                 HolidayPeriod(
-                    name=_localized_text(entry.get("name")) or "Ferien",
+                    name=_localized_text(entry.get("name")) or "Holidays",
                     start=start,
                     end=end,
                 )

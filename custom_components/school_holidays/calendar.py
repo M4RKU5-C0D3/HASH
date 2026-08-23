@@ -1,4 +1,4 @@
-"""Calendar-Entity mit allen Schulferien-Zeiträumen."""
+"""Calendar entity exposing all school holiday periods."""
 
 from __future__ import annotations
 
@@ -12,13 +12,13 @@ from homeassistant.helpers.typing import UndefinedType
 from homeassistant.util import dt as dt_util
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from . import SchulferienConfigEntry
+from . import SchoolHolidaysConfigEntry
 from .const import DOMAIN
-from .coordinator import HolidayPeriod, SchulferienCoordinator
+from .coordinator import HolidayPeriod, SchoolHolidaysCoordinator
 
 
 def _as_calendar_event(period: HolidayPeriod) -> CalendarEvent:
-    """Wandelt einen Ferienzeitraum in ein Kalender-Event (Ende exklusiv)."""
+    """Convert a holiday period into a calendar event (exclusive end)."""
     return CalendarEvent(
         start=period.start,
         end=period.end + timedelta(days=1),
@@ -28,25 +28,25 @@ def _as_calendar_event(period: HolidayPeriod) -> CalendarEvent:
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: SchulferienConfigEntry,
+    entry: SchoolHolidaysConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Richtet die Calendar-Entity ein."""
+    """Set up the calendar entity."""
     coordinator = entry.runtime_data
-    async_add_entities([SchulferienCalendarEntity(entry, coordinator, entry.title)])
+    async_add_entities([SchoolHolidaysCalendarEntity(entry, coordinator, entry.title)])
 
 
-class SchulferienCalendarEntity(
-    CoordinatorEntity[SchulferienCoordinator], CalendarEntity
+class SchoolHolidaysCalendarEntity(
+    CoordinatorEntity[SchoolHolidaysCoordinator], CalendarEntity
 ):
-    """Stellt alle Ferienzeiträume als Kalender-Events bereit."""
+    """Expose all holiday periods as calendar events."""
 
     _attr_has_entity_name = False
 
     def __init__(
         self,
-        entry: SchulferienConfigEntry,
-        coordinator: SchulferienCoordinator,
+        entry: SchoolHolidaysConfigEntry,
+        coordinator: SchoolHolidaysCoordinator,
         state_name: str,
     ) -> None:
         super().__init__(coordinator, context=None)
@@ -61,7 +61,7 @@ class SchulferienCalendarEntity(
 
     @property
     def event(self) -> CalendarEvent | None:
-        """Das laufende oder nächste Ferien-Event."""
+        """The ongoing or next holiday event."""
         today = dt_util.start_of_local_day().date()
         periods = self.coordinator.data or []
         period = next((p for p in periods if p.includes(today)), None)
@@ -75,7 +75,7 @@ class SchulferienCalendarEntity(
         start_date: datetime,
         end_date: datetime,
     ) -> list[CalendarEvent]:
-        """Alle Ferien-Events, die den Zeitraum schneiden."""
+        """All holiday events overlapping the requested range."""
         start_day = start_date.date()
         end_day = end_date.date()
         return [

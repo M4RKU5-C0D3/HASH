@@ -1,6 +1,6 @@
-"""Die Schulferien-Integration für Home Assistant.
+"""The school holidays integration for Home Assistant.
 
-Bereitet Schulferien pro Bundesland über die OpenHolidays API auf.
+Provides school holidays per German federal state via the OpenHolidays API.
 """
 
 from __future__ import annotations
@@ -13,30 +13,30 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import OpenHolidaysApiClient
 from .const import DOMAIN
-from .coordinator import SchulferienCoordinator
+from .coordinator import SchoolHolidaysCoordinator
 
 PLATFORMS: list[Platform] = [Platform.BINARY_SENSOR, Platform.CALENDAR, Platform.SENSOR]
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
-type SchulferienConfigEntry = ConfigEntry[SchulferienCoordinator]
+type SchoolHolidaysConfigEntry = ConfigEntry[SchoolHolidaysCoordinator]
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
-    """Set up the Schulferien integration."""
+    """Set up the School Holidays integration."""
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: SchulferienConfigEntry) -> bool:
-    """Richtet einen Config-Entry ein."""
+async def async_setup_entry(hass: HomeAssistant, entry: SchoolHolidaysConfigEntry) -> bool:
+    """Set up a config entry."""
     client = OpenHolidaysApiClient(async_get_clientsession(hass))
-    coordinator = SchulferienCoordinator(hass, entry, client)
+    coordinator = SchoolHolidaysCoordinator(hass, entry, client)
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: SchulferienConfigEntry) -> bool:
-    """Entlädt einen Config-Entry."""
+async def async_unload_entry(hass: HomeAssistant, entry: SchoolHolidaysConfigEntry) -> bool:
+    """Unload a config entry."""
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)

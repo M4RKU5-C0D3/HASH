@@ -4,13 +4,13 @@ Anleitung für Coding-Agenten, die an diesem Repository arbeiten (analog zum Vor
 
 ## Projektüberblick
 
-Home Assistant Custom Integration **`schulferien`**: stellt Schulferien pro Bundesland über die [OpenHolidays API](https://openholidaysapi.org) bereit. Ein Config-Entry = ein Bundesland. Datenquelle ist öffentlich und ohne API-Key.
+Home Assistant Custom Integration **`school_holidays`**: stellt Schulferien pro Bundesland über die [OpenHolidays API](https://openholidaysapi.org) bereit. Ein Config-Entry = ein Bundesland. Datenquelle ist öffentlich und ohne API-Key.
 
 ## Repository-Struktur
 
 ```
 .github/workflows/validate.yml     HACS-Validierung (hacs/action)
-custom_components/schulferien/
+custom_components/school_holidays/
   __init__.py                      Setup/Unload, PLATFORMS, ConfigEntry-Typ
   api.py                           OpenHolidaysApiClient + HolidayPeriod + Fehlerklasse
   binary_sensor.py                 laufende Ferien (on/off)
@@ -45,17 +45,17 @@ examples/                          YAML-Beispiele für die Doku
 ## Verifikation vor jedem Commit
 
 ```bash
-python3 -m compileall custom_components/schulferien          # Syntax
+python3 -m compileall custom_components/school_holidays       # Syntax
 python3 - <<'EOF'                                            # JSON valide?
 import json, pathlib
-for p in pathlib.Path("custom_components/schulferien").rglob("*.json"):
+for p in pathlib.Path("custom_components/school_holidays").rglob("*.json"):
     json.loads(p.read_text())
 EOF
 python3 -c "import yaml, pathlib; [yaml.safe_load(p.read_text()) for p in pathlib.Path('.').rglob('*.y*ml')]"
-ruff check custom_components/schulferien                     # falls installiert
+ruff check custom_components/school_holidays                  # falls installiert
 ```
 
-Manueller End-to-End-Test: `custom_components/schulferien/` in das `config/custom_components/` einer HA-Installation kopieren, neu starten, Integration hinzufügen und Log auf Fehler prüfen.
+Manueller End-to-End-Test: `custom_components/school_holidays/` in das `config/custom_components/` einer HA-Installation kopieren, neu starten, Integration hinzufügen und Log auf Fehler prüfen.
 
 ## Release-Prozess
 

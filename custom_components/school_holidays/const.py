@@ -1,8 +1,8 @@
-"""Konstanten für die Schulferien-Integration."""
+"""Constants for the school holidays integration."""
 
 from datetime import timedelta
 
-DOMAIN = "schulferien"
+DOMAIN = "school_holidays"
 
 CONF_SUBDIVISION = "subdivision"
 

@@ -1,6 +1,6 @@
 {
-  "domain": "schulferien",
-  "name": "Schulferien",
+  "domain": "school_holidays",
+  "name": "School Holidays",
   "codeowners": ["@M4RKU5-C0D3"],
   "config_flow": true,
   "documentation": "https://github.com/M4RKU5-C0D3/HASH",

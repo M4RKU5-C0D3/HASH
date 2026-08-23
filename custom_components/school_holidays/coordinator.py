@@ -1,4 +1,4 @@
-"""DataUpdateCoordinator für die Schulferien-Integration."""
+"""DataUpdateCoordinator for the school holidays integration."""
 
 from __future__ import annotations
 
@@ -16,8 +16,8 @@ from .const import CONF_SUBDIVISION, DOMAIN, LOOKAHEAD_DAYS, LOOKBACK_DAYS, UPDA
 _LOGGER = logging.getLogger(__name__)
 
 
-class SchulferienCoordinator(DataUpdateCoordinator[list[HolidayPeriod]]):
-    """Koordiniert die Ferien-Daten eines Bundeslands."""
+class SchoolHolidaysCoordinator(DataUpdateCoordinator[list[HolidayPeriod]]):
+    """Coordinate holiday data for a single federal state."""
 
     def __init__(
         self,
@@ -37,7 +37,7 @@ class SchulferienCoordinator(DataUpdateCoordinator[list[HolidayPeriod]]):
 
     @property
     def subdivision_code(self) -> str:
-        """Der konfigurierte Subdivision-Code, z.B. DE-NI."""
+        """The configured subdivision code, e.g. DE-NI."""
         return self.entry.data[CONF_SUBDIVISION]
 
     async def _async_update_data(self) -> list[HolidayPeriod]:

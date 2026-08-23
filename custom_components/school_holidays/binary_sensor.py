@@ -1,4 +1,4 @@
-"""Binärer Sensor für aktuell laufende Schulferien."""
+"""Binary sensor for currently active school holidays."""
 
 from __future__ import annotations
 
@@ -14,9 +14,9 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from . import SchulferienConfigEntry
+from . import SchoolHolidaysConfigEntry
 from .const import DOMAIN
-from .coordinator import HolidayPeriod, SchulferienCoordinator
+from .coordinator import HolidayPeriod, SchoolHolidaysCoordinator
 
 ENTITY_DESCRIPTION = BinarySensorEntityDescription(
     key="current",
@@ -25,7 +25,7 @@ ENTITY_DESCRIPTION = BinarySensorEntityDescription(
 
 
 def _current_period(
-    coordinator: SchulferienCoordinator, today: date
+    coordinator: SchoolHolidaysCoordinator, today: date
 ) -> HolidayPeriod | None:
     return next(
         (period for period in coordinator.data or [] if period.includes(today)),
@@ -35,31 +35,31 @@ def _current_period(
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: SchulferienConfigEntry,
+    entry: SchoolHolidaysConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Richtet den Binärsensor ein."""
+    """Set up the binary sensor."""
     coordinator = entry.runtime_data
     async_add_entities(
         [
-            SchulferienAktuellBinarySensor(
+            SchoolHolidaysActiveBinarySensor(
                 entry, coordinator, ENTITY_DESCRIPTION, entry.title
             )
         ]
     )
 
 
-class SchulferienAktuellBinarySensor(
-    CoordinatorEntity[SchulferienCoordinator], BinarySensorEntity
+class SchoolHolidaysActiveBinarySensor(
+    CoordinatorEntity[SchoolHolidaysCoordinator], BinarySensorEntity
 ):
-    """Zeigt an, ob gerade Schulferien laufen."""
+    """Indicate whether school holidays are currently running."""
 
     _attr_has_entity_name = False
 
     def __init__(
         self,
-        entry: SchulferienConfigEntry,
-        coordinator: SchulferienCoordinator,
+        entry: SchoolHolidaysConfigEntry,
+        coordinator: SchoolHolidaysCoordinator,
         entity_description: BinarySensorEntityDescription,
         state_name: str,
     ) -> None:
@@ -76,13 +76,13 @@ class SchulferienAktuellBinarySensor(
 
     @property
     def is_on(self) -> bool:
-        """True, wenn heute Ferien sind."""
+        """Return true if today is a holiday."""
         today = dt_util.now().date()
         return _current_period(self.coordinator, today) is not None
 
     @property
     def extra_state_attributes(self) -> dict:
-        """Name und Ende der laufenden Ferien."""
+        """Name and end date of the running holidays."""
         today = dt_util.now().date()
         current = _current_period(self.coordinator, today)
         return {

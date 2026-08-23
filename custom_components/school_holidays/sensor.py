@@ -1,4 +1,4 @@
-"""Sensor für die nächsten Schulferien."""
+"""Sensor for the next school holidays."""
 
 from __future__ import annotations
 
@@ -11,13 +11,13 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from . import SchulferienConfigEntry
+from . import SchoolHolidaysConfigEntry
 from .const import DOMAIN
-from .coordinator import HolidayPeriod, SchulferienCoordinator
+from .coordinator import HolidayPeriod, SchoolHolidaysCoordinator
 
 
-def _next_period(coordinator: SchulferienCoordinator, today: date) -> HolidayPeriod | None:
-    """Liefert die laufenden oder nächsten Ferien."""
+def _next_period(coordinator: SchoolHolidaysCoordinator, today: date) -> HolidayPeriod | None:
+    """Return the running or next holiday period."""
     periods = coordinator.data or []
     for period in periods:
         if period.includes(today):
@@ -27,26 +27,26 @@ def _next_period(coordinator: SchulferienCoordinator, today: date) -> HolidayPer
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: SchulferienConfigEntry,
+    entry: SchoolHolidaysConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Richtet den Sensor ein."""
+    """Set up the sensor."""
     coordinator = entry.runtime_data
-    async_add_entities([NaechsteSchulferienSensor(entry, coordinator, entry.title)])
+    async_add_entities([NextSchoolHolidaysSensor(entry, coordinator, entry.title)])
 
 
-class NaechsteSchulferienSensor(
-    CoordinatorEntity[SchulferienCoordinator], SensorEntity
+class NextSchoolHolidaysSensor(
+    CoordinatorEntity[SchoolHolidaysCoordinator], SensorEntity
 ):
-    """Zeigt die nächsten (oder laufenden) Schulferien."""
+    """Expose the next (or currently running) school holidays."""
 
     _attr_has_entity_name = False
     _attr_icon = "mdi:calendar-star"
 
     def __init__(
         self,
-        entry: SchulferienConfigEntry,
-        coordinator: SchulferienCoordinator,
+        entry: SchoolHolidaysConfigEntry,
+        coordinator: SchoolHolidaysCoordinator,
         state_name: str,
     ) -> None:
         super().__init__(coordinator, context=None)
@@ -61,13 +61,13 @@ class NaechsteSchulferienSensor(
 
     @property
     def native_value(self) -> str | None:
-        """Name der nächsten bzw. laufenden Ferien."""
+        """Name of the next or running holidays."""
         period = _next_period(self.coordinator, dt_util.now().date())
         return period.name if period else None
 
     @property
     def extra_state_attributes(self) -> dict:
-        """Details zu den nächsten Ferien."""
+        """Details about the next holidays."""
         today = dt_util.now().date()
         period = _next_period(self.coordinator, today)
         if period is None:

@@ -35,7 +35,7 @@ The API allows query windows of at most 3 years – this is handled internally: 
 
 ### Manually
 
-1. Copy the `custom_components/schulferien/` directory into `<config>/custom_components/schulferien/`
+1. Copy the `custom_components/school_holidays/` directory into `<config>/custom_components/school_holidays/`
 2. Restart Home Assistant
 3. Add it via the UI as described above
 
