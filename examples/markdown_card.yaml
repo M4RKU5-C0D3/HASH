@@ -1,0 +1,17 @@
+type: markdown
+title: Nächste Schulferien
+content: >-
+  {% set entity = 'sensor.school_holidays_niedersachsen_next_holidays' %}
+  {% set name = states(entity) %}
+  {% set days = state_attr(entity, 'days_until_start') | int(0) %}
+  {% set rest = state_attr(entity, 'days_remaining') %}
+
+  {% if name in ['unknown', 'unavailable', 'none'] or name == '' %}
+    Keine Feriendaten verfügbar.
+  {% elif rest is not none and rest | int > 0 %}
+    Noch **{{ rest }} {{ 'Tag' if rest | int == 1 else 'Tage' }}** {{ name }}.
+  {% elif days == 1 %}
+    Morgen beginnen die **{{ name }}**!
+  {% else %}
+    Nur noch **{{ days }} Tage** bis zu den **{{ name }}**.
+  {% endif %}

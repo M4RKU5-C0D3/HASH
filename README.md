@@ -68,8 +68,13 @@ Example for Lower Saxony (`niedersachsen`): `calendar.school_holidays_niedersach
 | `end` | str | End date (ISO) |
 | `days_until_start` | int | Days until the start, `0` if already running |
 | `duration_days` | int | Total duration including first and last day |
+| `days_remaining` | int \| null | While holidays are running: days left including today, otherwise absent |
 
 The sensor's state is the name of the next (or currently running) holidays.
+
+### Dashboard example
+
+A ready-made markdown card with a countdown ("Nur noch *x* Tage bis zu den …") lives in [`examples/markdown_card.yaml`](examples/markdown_card.yaml).
 
 ## Example automations
 
