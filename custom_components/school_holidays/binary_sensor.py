@@ -20,6 +20,7 @@ from .coordinator import HolidayPeriod, SchoolHolidaysCoordinator
 
 ENTITY_DESCRIPTION = BinarySensorEntityDescription(
     key="current",
+    name="Active",
     icon="mdi:palm-tree",
 )
 
@@ -54,7 +55,7 @@ class SchoolHolidaysActiveBinarySensor(
 ):
     """Indicate whether school holidays are currently running."""
 
-    _attr_has_entity_name = False
+    _attr_has_entity_name = True
 
     def __init__(
         self,
@@ -66,7 +67,6 @@ class SchoolHolidaysActiveBinarySensor(
         super().__init__(coordinator, context=None)
         self.entity_description = entity_description
         self._attr_unique_id = f"{entry.entry_id}_{entity_description.key}"
-        self._attr_name = f"School Holidays Active {state_name}"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
             name=f"School Holidays {state_name}",

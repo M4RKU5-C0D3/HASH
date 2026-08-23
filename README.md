@@ -48,19 +48,19 @@ All entities belong to their respective device (e.g. "School Holidays Niedersach
 | Entity | Type | Purpose |
 |---|---|---|
 | `calendar.school_holidays_<state>` | Calendar | One event per holiday period, summary = holiday name |
-| `binary_sensor.school_holidays_active_<state>` | Binary sensor | `on` while today is a holiday |
-| `sensor.next_school_holidays_<state>` | Sensor | Name of the next (or currently running) holidays |
+| `binary_sensor.school_holidays_<state>_active` | Binary sensor | `on` while today is a holiday |
+| `sensor.school_holidays_<state>_next_holidays` | Sensor | Name of the next (or currently running) holidays |
 
-Example for Lower Saxony (`niedersachsen`): `calendar.school_holidays_niedersachsen`, `binary_sensor.school_holidays_active_niedersachsen`, `sensor.next_school_holidays_niedersachsen`.
+Example for Lower Saxony (`niedersachsen`): `calendar.school_holidays_niedersachsen`, `binary_sensor.school_holidays_niedersachsen_active`, `sensor.school_holidays_niedersachsen_next_holidays`.
 
-### Attributes of `binary_sensor.school_holidays_active_*`
+### Attributes of `*_active` binary sensor
 
 | Attribute | Type | Description |
 |---|---|---|
 | `holiday_name` | str \| null | Name of the current holidays (e.g. "Sommerferien") or `null` |
 | `holiday_end` | str \| null | End date of the current holidays (ISO) or `null` |
 
-### Attributes of `sensor.next_school_holidays_*`
+### Attributes of `*_next_holidays` sensor
 
 | Attribute | Type | Description |
 |---|---|---|

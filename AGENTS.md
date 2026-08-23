@@ -29,7 +29,7 @@ examples/                          YAML-Beispiele für die Doku
 ## Konventionen
 
 - **Sprache:** Code, Docstrings, Logging und README auf Englisch; UI-Texte des Config-Flows auf Deutsch (`translations/de.json`), Fallback `strings.json` auf Englisch.
-- **Entity-/Attribut-Namen:** ebenfalls Englisch (z. B. `binary_sensor.school_holidays_active_*`, Attribute `holiday_name`, `days_until_start`); nur der Bundeslandname geht als Eigenname ein (z. B. `niedersachsen`).
+- **Entity-/Attribut-Namen:** ebenfalls Englisch und kurz gehalten (`has_entity_name = True`); das Gerät trägt den Bundeslandnamen, die Entität nur ihre Funktion – z. B. Gerät „School Holidays Niedersachsen" mit `binary_sensor.school_holidays_niedersachsen_active`, Attributen wie `holiday_name`, `days_until_start`.
 - **Async überall:** Kein blockierender I/O; HTTP ausschließlich über den geteilten aiohttp-Client (`homeassistant.helpers.aiohttp_client.async_get_clientsession`).
 - **Keine externen Requirements:** `aiohttp` ist in HA enthalten. Neue Abhängigkeiten nur mit gutem Grund.
 - **HA-Stil:** `DataUpdateCoordinator` für Polling, Entities als `CoordinatorEntity`, `DeviceInfo` pro Entry, Unique IDs aus `entry.entry_id` + Suffix.
